@@ -50,16 +50,16 @@ public class Main {
 
     private static void mostrarMenu() {
         System.out.println();
-        System.out.println("====");
-        System.out.println("        SISTEMA AULALOGIC");
-        System.out.println("====");
+        System.out.println("============================================");
+        System.out.println("           SISTEMA AULALOGIC");
+        System.out.println("============================================");
         System.out.println("1. Registrar estudiante");
         System.out.println("2. Listar estudiantes");
         System.out.println("3. Buscar estudiante");
         System.out.println("4. Generar reporte academico");
         System.out.println("5. Guardar registros");
         System.out.println("6. Salir");
-        System.out.println("====");
+        System.out.println("============================================");
         System.out.print("Seleccione una opcion: ");
     }
 
@@ -95,3 +95,46 @@ public class Main {
     }
 
     private static void buscarEstudiante(Scanner sc, GestionAcademica gestion) {
+        System.out.print("Ingrese el codigo del estudiante a buscar: ");
+        String codigo = sc.nextLine().trim();
+        Estudiante encontrado = gestion.buscar(codigo);
+        if (encontrado == null) {
+            System.out.println("No se encontro un estudiante con el codigo: " + codigo);
+        } else {
+            System.out.println(encontrado.describir());
+        }
+    }
+
+    private static String leerTextoValido(Scanner sc, String mensaje) {
+        String texto;
+        do {
+            System.out.print(mensaje);
+            texto = sc.nextLine().trim();
+            if (texto.isEmpty()) {
+                System.out.println("El campo no puede estar vacio. Intente de nuevo.");
+            } else if (texto.contains(";")) {
+                System.out.println("El campo no puede contener punto y coma. Intente de nuevo.");
+                texto = "";
+            }
+        } while (texto.isEmpty());
+        return texto;
+    }
+
+    private static int leerNota(Scanner sc, int numero) {
+        int nota = -1;
+        do {
+            System.out.print("Calificacion " + numero + " (0-20): ");
+            String entrada = sc.nextLine().trim();
+            try {
+                nota = Integer.parseInt(entrada);
+                if (nota < 0 || nota > 20) {
+                    System.out.println("La calificacion debe estar entre 0 y 20. Intente de nuevo.");
+                    nota = -1;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ingrese un numero valido. Intente de nuevo.");
+            }
+        } while (nota < 0);
+        return nota;
+    }
+}
